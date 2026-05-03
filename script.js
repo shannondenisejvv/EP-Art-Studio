@@ -1,35 +1,112 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
-const track = document.querySelector(".pottery-track");
-const next = document.querySelector(".next");
-const prev = document.querySelector(".prev");
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.14 });
 
-function slideAmount() {
-  return track.querySelector("img").offsetWidth + 16;
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+const potteryTrack = document.querySelector(".pottery-track");
+const potteryNext = document.querySelector(".pottery-slider .next");
+const potteryPrev = document.querySelector(".pottery-slider .prev");
+
+function getSlideAmount() {
+  if (!potteryTrack) return 0;
+
+  const firstSlide = potteryTrack.querySelector("img");
+
+  if (!firstSlide) {
+    return potteryTrack.clientWidth * 0.8;
+  }
+
+  const gap = parseFloat(getComputedStyle(potteryTrack).gap) || 0;
+  return firstSlide.getBoundingClientRect().width + gap;
 }
 
-next.onclick = () => track.scrollBy({ left: slideAmount(), behavior: "smooth" });
-prev.onclick = () => track.scrollBy({ left: -slideAmount(), behavior: "smooth" });
+function snapToNearestSlide() {
+  if (!potteryTrack) return;
 
-// DRAG
-let isDown = false;
-let startX;
-let scrollLeft;
+  const slideAmount = getSlideAmount();
 
-track.addEventListener("pointerdown", (e) => {
-  isDown = true;
-  startX = e.pageX;
-  scrollLeft = track.scrollLeft;
-  track.classList.add("dragging");
-});
+  if (!slideAmount) return;
 
-track.addEventListener("pointerup", () => {
-  isDown = false;
-  track.classList.remove("dragging");
-});
+  const nearestIndex = Math.round(potteryTrack.scrollLeft / slideAmount);
 
-track.addEventListener("pointermove", (e) => {
-  if (!isDown) return;
-  const walk = (e.pageX - startX) * 1.2;
-  track.scrollLeft = scrollLeft - walk;
-});
+  potteryTrack.scrollTo({
+    left: nearestIndex * slideAmount,
+    behavior: "smooth"
+  });
+}
+
+if (potteryTrack && potteryNext && potteryPrev) {
+  potteryNext.addEventListener("click", () => {
+    potteryTrack.scrollBy({
+      left: getSlideAmount(),
+      behavior: "smooth"
+    });
+  });
+
+  potteryPrev.addEventListener("click", () => {
+    potteryTrack.scrollBy({
+      left: -getSlideAmount(),
+      behavior: "smooth"
+    });
+  });
+
+  let isDown = false;
+  let startX = 0;
+  let scrollLeft = 0;
+  let hasMoved = false;
+  let snapTimeout;
+
+  potteryTrack.addEventListener("pointerdown", (event) => {
+    isDown = true;
+    hasMoved = false;
+    startX = event.clientX;
+    scrollLeft = potteryTrack.scrollLeft;
+    potteryTrack.classList.add("dragging");
+    potteryTrack.setPointerCapture(event.pointerId);
+  });
+
+  potteryTrack.addEventListener("pointermove", (event) => {
+    if (!isDown) return;
+
+    const walk = event.clientX - startX;
+
+    if (Math.abs(walk) > 4) {
+      hasMoved = true;
+    }
+
+    potteryTrack.scrollLeft = scrollLeft - walk;
+  });
+
+  function endDrag(event) {
+    if (!isDown) return;
+
+    isDown = false;
+    potteryTrack.classList.remove("dragging");
+
+    try {
+      potteryTrack.releasePointerCapture(event.pointerId);
+    } catch (error) {}
+
+    if (hasMoved) {
+      clearTimeout(snapTimeout);
+      snapTimeout = setTimeout(snapToNearestSlide, 80);
+    }
+  }
+
+  potteryTrack.addEventListener("pointerup", endDrag);
+  potteryTrack.addEventListener("pointercancel", endDrag);
+  potteryTrack.addEventListener("pointerleave", endDrag);
+
+  potteryTrack.addEventListener("scroll", () => {
+    clearTimeout(snapTimeout);
+    snapTimeout = setTimeout(snapToNearestSlide, 140);
+  }, { passive: true });
+}
