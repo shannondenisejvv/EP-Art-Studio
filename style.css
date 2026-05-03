@@ -1,5 +1,104 @@
 /* =========================
-   POTTERY (FIXED)
+   BASE
+========================= */
+
+body {
+  margin: 0;
+  font-family: 'Raleway', sans-serif;
+  color: #2B2B2B;
+  background: #F4EFEA;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.section {
+  padding: 4rem 0;
+}
+
+/* =========================
+   NAV
+========================= */
+
+.site-header {
+  padding: 1rem 0;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu a {
+  margin-left: 1rem;
+  text-decoration: none;
+  color: #2F5D73;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+/* =========================
+   GALLERY
+========================= */
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.art-card {
+  background: white;
+  border-radius: 20px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.art-card img {
+  height: 300px;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.art-caption {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-top: 1rem;
+}
+
+.art-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.enquire-btn {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid #2F5D73;
+  background: white;
+  color: #2F5D73;
+}
+
+/* =========================
+   POTTERY (YOUR FIX)
 ========================= */
 
 .pottery-slider {
@@ -16,10 +115,10 @@
 }
 
 .pottery-track img {
-  flex: 0 0 55%;              /* smaller width */
-  max-height: 420px;          /* controls size */
+  flex: 0 0 55%;
+  max-height: 420px;
   width: auto;
-  object-fit: contain;        /* shows full image */
+  object-fit: contain;
   object-position: center;
   border-radius: 18px;
   scroll-snap-align: center;
@@ -44,7 +143,21 @@
 .prev { left: 10px; }
 .next { right: 10px; }
 
-@media (max-width: 760px) {
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
   .pottery-track img {
     flex: 0 0 85%;
     max-height: 280px;
