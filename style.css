@@ -43,3 +43,10 @@
 
 .prev { left: 10px; }
 .next { right: 10px; }
+
+@media (max-width: 760px) {
+  .pottery-track img {
+    flex: 0 0 85%;
+    max-height: 280px;
+  }
+}
