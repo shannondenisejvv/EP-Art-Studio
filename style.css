@@ -118,14 +118,16 @@ img {
 }
 
 .pottery-track img {
-  flex: 0 0 75%;
+  flex: 0 0 65%;
   height: auto;
-  max-height: 700px;
-  object-fit: contain; /* CRITICAL */
-  background: #f6f1eb;
-  border-radius: 26px;
+  max-height: 520px;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 22px;
   scroll-snap-align: center;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  border: 8px solid rgba(255,255,255,0.85);
+  background: #f6f1eb;
 }
 
 /* buttons */
@@ -166,8 +168,9 @@ img {
     height: 260px;
   }
 
+@media (max-width: 760px) {
   .pottery-track img {
-    flex: 0 0 92%;
-    max-height: 500px;
+    flex: 0 0 88%;
+    max-height: 360px;
   }
 }
