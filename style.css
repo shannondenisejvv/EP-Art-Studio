@@ -434,7 +434,8 @@ p {
 
 .pottery-track img {
   flex: 0 0 86%;
-  height: 520px;
+  height: auto;
+  max-height: 760px;
   object-fit: contain;
   object-position: center;
   border-radius: 26px;
@@ -549,11 +550,6 @@ blockquote {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .pottery-track img {
-    flex-basis: 88%;
-    height: 480px;
-  }
-}
 
 @media (max-width: 760px) {
   :root {
@@ -600,13 +596,14 @@ blockquote {
     min-height: 320px;
   }
 
-  .pottery-track img {
-    flex: 0 0 92%;
-    height: 380px;
-    object-fit: contain;
-    border-width: 7px;
-    border-radius: 22px;
-  }
+.pottery-track img {
+  flex: 0 0 92%;
+  height: auto;
+  max-height: 560px;
+  object-fit: contain;
+  border-width: 7px;
+  border-radius: 22px;
+}
 
   .slider-btn {
     width: 42px;
@@ -616,10 +613,4 @@ blockquote {
 
   .prev { left: 0.6rem; }
   .next { right: 0.6rem; }
-}
-
-@media (max-width: 430px) {
-  .pottery-track img {
-    height: 320px;
-  }
 }
